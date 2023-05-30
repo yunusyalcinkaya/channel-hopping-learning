@@ -59,9 +59,9 @@ void train_algorithm(FILE* file){
             fprintf(file,"rewards: ");
             for(int i = 0; i < NUM_ACTIONS; i++){
                 rewards[i] = (((double)rand() / RAND_MAX) * 10) + Q_TABLE[i];
-                if((double)rand()/RAND_MAX < 0.1){
-                    rewards[i] *= -1;
-                }
+                // if((double)rand()/RAND_MAX < 0.5){
+                //     rewards[i] *= -1;
+                // }
                 fprintf(file,"%f, ",rewards[i]);
             }
             reward = rewards[action];
