@@ -1,11 +1,11 @@
-// single state
+// multi state, constant metric, write only choosen action to file
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
 
 #define NUM_ACTIONS 16
 #define NUM_STATES 16
-#define MAX_STEPS 1000
+#define MAX_STEPS 10000
 
 FILE *file;
 
@@ -17,14 +17,19 @@ void print_Q_TABLE();
 int current_state = 0;
 
 double Q_TABLE[NUM_STATES][NUM_ACTIONS];
-double metric_values[]= {1.0,2.0,3.0,4.0,5.0,6.0,7.0,8.0,9.0,10.0,11.0,12.0,13.0,14.0,15.0,16.0};
+// double metric_values[]= {-90.0,-90.0,-90.0,-90.0,-90.0,-90.0,-85.0,-85.0,
+//                             -85.0,-85.0,-85.0,-80.0,-80.0,-80.0,-80.0,-80.0};
+
+double metric_values[]= {-90.0,-90.0,-90.0,-90.0,-90.0,-90.0,-90.0,-90.0,
+                            -90.0,-90.0,-90.0,-90.0,-90.0,-90.0,-90.0,-90.0};
+
 
 int chooseAction(int state){
 
     // Epsilon-Greedy Policy
-    double epsilon = 0.1;
-    if ((double)rand() / RAND_MAX < 0){
-        printf("UNDESIRED CASE\n");
+    double epsilon = 0.2;
+    if ((double)rand() / RAND_MAX < epsilon){
+        printf("EXPLORATION CASE\n");
         // Exploration
         return rand() % NUM_ACTIONS;
     }
@@ -36,7 +41,6 @@ int chooseAction(int state){
                 bestAction = i;
             }
         }
-        
         return bestAction;
     }
 }
@@ -52,14 +56,13 @@ void train_algorithm(){
         int action = chooseAction(current_state);// best action index
         double reward;
        
-        
-        print_Q_TABLE();
         fprintf(file,"%d\n", action);
 
-        printf("choosen action: %d\n", action);
+        print_Q_TABLE();
+        printf("state: %d, choosen action: %d\n",current_state, action);
 
         if(current_state == action){
-            reward = -4;
+            reward = -10;
         }
         else {
             reward = (metric_values[action] - metric_values[current_state])*10;
@@ -90,7 +93,7 @@ void print_Q_TABLE(){
 
 int main(){
 
-    file = fopen("../outputs/learning-test.txt","w");
+    file = fopen("../outputs/multi-write-action-test.txt","w");
 
     for(int i = 0; i < NUM_STATES;i++){
         for(int j = 0; j < NUM_ACTIONS;j++){
