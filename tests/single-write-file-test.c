@@ -17,14 +17,15 @@ int prev_action = 0;
 double Q_TABLE[NUM_ACTIONS];
 
 //double metric_values[]= {1.0,2.0,3.0,4.0,5.0,6.0,7.0,8.0,9.0,10.0,11.0,12.0,13.0,14.0,15.0,16.0};
-double metric_values[]= {-90.0,-90.0,-90.0,-90.0,-90.0,-90.0,-85.0,-85.0,
-                            -85.0,-85.0,-85.0,-80.0,-80.0,-80.0,-80.0,-80.0};
+//double metric_values[]= {-90.0,-90.0,-90.0,-90.0,-90.0,-90.0,-85.0,-85.0,
+  //                          -85.0,-85.0,-85.0,-80.0,-80.0,-80.0,-80.0,-80.0};
 
 // double metric_values[]= {-90.0,-90.0,-90.0,-90.0,-90.0,-90.0,-90.0,-90.0,
 //                             -90.0,-90.0,-90.0,-90.0,-90.0,-90.0,-90.0,-90.0};
 
-double metric_average[] = {-90.0,-90.0,-90.0,-90.0,-90.0,-90.0,-90.0,-90.0,
-                                -90.0,-90.0,-90.0,-90.0,-90.0,-90.0,-90.0,-90.0};
+double metric_values[NUM_ACTIONS];
+
+double metric_average[NUM_ACTIONS];
 int iteration = 0;
 
 int chooseAction(){
@@ -65,14 +66,15 @@ void train_algorithm(){
         printf("choosen action: %d\n", action);
 
         if(prev_action == action){
-            reward = -4;
+            reward = -5;
         }
         else {
             for(int i=0; i < NUM_ACTIONS; i++){
-                metric_values[i] = (rand()/RAND_MAX)*10 - 90;
+                metric_values[i] = ((double)rand()/RAND_MAX)*20 - 90;
                 metric_average[i] = (metric_average[i] * iteration + metric_values[i]) / (iteration + 1);
-                iteration++;
+                printf("metric value: %f, metric average: %f\n",metric_values[i],metric_average[i]);
             }
+            iteration++;
             reward =  (metric_values[action] - metric_values[prev_action])*10;
             printf("\n --------------------------------------\n");
         }
@@ -89,6 +91,8 @@ void train_algorithm(){
 
 void print_Q_TABLE(){
 
+    srand((unsigned)time(NULL));
+
     printf("Q-table:\n");
 
     for (int j = 0; j < NUM_ACTIONS; j++)
@@ -100,6 +104,7 @@ void print_Q_TABLE(){
 }
 
 int main(){
+
 
     file = fopen("../outputs/single-write-action-test.txt","w");
 

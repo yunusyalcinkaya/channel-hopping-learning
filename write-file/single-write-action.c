@@ -17,11 +17,11 @@ int prev_action = 0;
 double Q_TABLE[NUM_ACTIONS];
 
 //double metric_values[]= {1.0,2.0,3.0,4.0,5.0,6.0,7.0,8.0,9.0,10.0,11.0,12.0,13.0,14.0,15.0,16.0};
-// double metric_values[]= {-90.0,-90.0,-90.0,-90.0,-90.0,-90.0,-85.0,-85.0,
-//                             -85.0,-85.0,-85.0,-80.0,-80.0,-80.0,-80.0,-80.0};
+double metric_values[]= {-90.0,-90.0,-90.0,-90.0,-90.0,-90.0,-85.0,-85.0,
+                            -85.0,-85.0,-85.0,-80.0,-80.0,-80.0,-80.0,-80.0};
 
-double metric_values[]= {-90.0,-90.0,-90.0,-90.0,-90.0,-90.0,-90.0,-90.0,
-                            -90.0,-90.0,-90.0,-90.0,-90.0,-90.0,-90.0,-90.0};
+// double metric_values[]= {-90.0,-90.0,-90.0,-90.0,-90.0,-90.0,-90.0,-90.0,
+//                             -90.0,-90.0,-90.0,-90.0,-90.0,-90.0,-90.0,-90.0};
 
 
 
@@ -94,7 +94,7 @@ void print_Q_TABLE(){
 
 int main(){
 
-    file = fopen("../outputs/single-write-action","w");
+    file = fopen("../outputs/single-write-action.txt","w");
 
     // Fill the Q-Table with initial values
     for (int j = 0; j < NUM_ACTIONS; j++)
