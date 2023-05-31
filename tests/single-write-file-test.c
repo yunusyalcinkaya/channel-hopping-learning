@@ -23,7 +23,9 @@ double metric_values[]= {-90.0,-90.0,-90.0,-90.0,-90.0,-90.0,-85.0,-85.0,
 // double metric_values[]= {-90.0,-90.0,-90.0,-90.0,-90.0,-90.0,-90.0,-90.0,
 //                             -90.0,-90.0,-90.0,-90.0,-90.0,-90.0,-90.0,-90.0};
 
-
+double metric_average[] = {-90.0,-90.0,-90.0,-90.0,-90.0,-90.0,-90.0,-90.0,
+                                -90.0,-90.0,-90.0,-90.0,-90.0,-90.0,-90.0,-90.0};
+int iteration = 0;
 
 int chooseAction(){
 
@@ -66,6 +68,11 @@ void train_algorithm(){
             reward = -4;
         }
         else {
+            for(int i=0; i < NUM_ACTIONS; i++){
+                metric_values[i] = (rand()/RAND_MAX)*10 - 90;
+                metric_average[i] = (metric_average[i] * iteration + metric_values[i]) / (iteration + 1);
+                iteration++;
+            }
             reward =  (metric_values[action] - metric_values[prev_action])*10;
             printf("\n --------------------------------------\n");
         }
@@ -106,6 +113,12 @@ int main(){
     train_algorithm();
 
     print_Q_TABLE();
+
+    printf("----------------------------------------------\n");
+    for(int i =0; i< NUM_ACTIONS; i++){
+        printf("%f, ", metric_average[i]);
+    }
+    printf("\n");
 
     fclose(file);
     return 0;
