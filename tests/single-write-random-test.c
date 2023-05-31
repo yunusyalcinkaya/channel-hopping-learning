@@ -106,7 +106,7 @@ void print_Q_TABLE(){
 int main(){
 
 
-    file = fopen("../outputs/single-write-action-test.txt","w");
+    file = fopen("../outputs/single-write-random-test.txt","w");
 
     // Fill the Q-Table with initial values
     for (int j = 0; j < NUM_ACTIONS; j++)

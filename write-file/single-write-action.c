@@ -63,7 +63,7 @@ void train_algorithm(){
         printf("choosen action: %d\n", action);
 
         if(prev_action == action){
-            reward = -4;
+            reward = -10;
         }
         else {
             reward =  (metric_values[action] - metric_values[prev_action])*10;
