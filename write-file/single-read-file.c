@@ -31,7 +31,7 @@ int chooseAction(){
     // Epsilon-Greedy Policy
     double epsilon = 0.1;
     if ((double)rand() / RAND_MAX < epsilon){
-        printf("UNDESIRED CASE\n");
+        //printf("UNDESIRED CASE\n");
         // Exploration
         return rand() % NUM_ACTIONS;
     }
@@ -81,7 +81,7 @@ void train_algorithm(){
         prev_action = action;
 
         // Update the Q-Table
-        double alpha = 0.1; // Learning Rate
+        double alpha = 0.2; // Learning Rate
 
         update_Q_TABLE(action, reward, alpha);
     }
