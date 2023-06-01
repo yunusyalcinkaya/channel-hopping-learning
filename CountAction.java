@@ -8,7 +8,7 @@ public class CountAction{
     public static void main(String[] args) throws FileNotFoundException {
 
         int[] channels = new int[16]; 
-        File file = new File("learning/outputs/single-write-action.txt");
+        File file = new File("learning/outputs/greedy-actions.txt");
         Scanner scanner = new Scanner(file);
 
         while(scanner.hasNext()){
