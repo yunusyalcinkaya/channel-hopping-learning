@@ -11,10 +11,10 @@ FILE *file_actions;
 FILE *file_metrics;
 FILE *file_channels_availability;
 
-double metric_values[NUM_CHANNELS];
-double metric_average[NUM_CHANNELS];
+float metric_values[NUM_CHANNELS];
+float metric_average[NUM_CHANNELS];
 int channels_availability[SLOTFRAME_SIZE][NUM_CHANNELS];
-int temp_metric_values[NUM_CHANNELS];
+float temp_metric_values[NUM_CHANNELS];
 
 int iteration = 0;
 int dropped;
@@ -32,11 +32,13 @@ void print_metric_average();
 void write_outputs_to_file(int action);
 
 
+
+
 void write_outputs_to_file(int action){
     for(int channel=0; channel < NUM_CHANNELS; channel++){
             fprintf(file_outputs,"%f, ", temp_metric_values[channel]);
     }
-    fprintf(file_outputs,"chosen action: %d\n",action);
+    fprintf(file_outputs,"\nchosen action: %d\n",action);
     fprintf(file_outputs,"----------------------------------------------\n");
 }
 
@@ -62,7 +64,7 @@ void write_metric_values_to_file(){
 
 void random_metric_values(int timeslot){
     for(int channel=0; channel<NUM_CHANNELS; channel++){
-        metric_values[channel]= ((double)rand() / RAND_MAX)*30 -90;
+        metric_values[channel]= ((float)rand() / RAND_MAX)*30 -90;
 
         metric_average[channel] = (metric_average[channel] * iteration +
                     metric_values[channel]*channels_availability[timeslot][channel])/
@@ -167,6 +169,8 @@ int main(){
 
     fclose(file_actions);
     fclose(file_outputs);
+    fclose(file_metrics);
+    fclose(file_channels_availability);
 
     return 0;
 }

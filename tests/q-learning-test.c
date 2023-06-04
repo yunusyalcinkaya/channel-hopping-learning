@@ -11,15 +11,16 @@ FILE *file_actions;
 FILE *file_metrics;
 FILE *file_channels_availability;
 
-double QTABLE[SLOTFRAME_SIZE][NUM_CHANNELS];
+float QTABLE[SLOTFRAME_SIZE][NUM_CHANNELS];
 
-double metric_values[NUM_CHANNELS];
+float metric_values[NUM_CHANNELS];
 int channels_availability[SLOTFRAME_SIZE][NUM_CHANNELS];
-int temp_metric_values[NUM_CHANNELS];
+float temp_metric_values[NUM_CHANNELS];
 
 int iteration = 0;
 int dropped;
-double learning_rate = 0.1;
+float learning_rate = 0.1;
+int previous_action =0;
 
 int chooseAction(int state);
 void process();
@@ -28,11 +29,22 @@ void init_metric_values();
 void copy_metric_values_to_temp();
 void read_metric_values_from_file();
 void write_outputs_to_file(int action);
-void update_QTABLE(int state, int action, double reward);
-double get_reward(double metric,int state, int action);
+void update_QTABLE(int state, int action, float reward);
+float get_reward(float metric,int state, int action);
 void read_channels_availability_from_file();
+void print_QTABLE_to_file();
 
 
+
+void print_QTABLE_to_file(){
+    fprintf(file_outputs,"-------------------- QTABLE ----------------\n");
+    for (int timeslot = 0; timeslot < SLOTFRAME_SIZE; timeslot++){
+        for(int channel =0; channel< NUM_CHANNELS; channel++){
+            fprintf(file_outputs,"%f, ",QTABLE[timeslot][channel]);
+        }
+        fprintf(file_outputs,"\n");
+    } 
+}
 
 void read_channels_availability_from_file(){
     for(int timeslot=0; timeslot<SLOTFRAME_SIZE; timeslot++){
@@ -42,14 +54,15 @@ void read_channels_availability_from_file(){
     }
 }
 
-double get_reward(double metric, int state, int action){
-    if(channels_availability[state][action] == 2){
-        return -10;
+float get_reward(float metric, int state, int action){
+    if(channels_availability[state][action] == 2 || action == previous_action){
+        return -1;
     }
-    return -(1/metric)*100;
+    previous_action = action;
+    return -(1/metric)*90;
 }
 
-void update_QTABLE(int state, int action, double reward){
+void update_QTABLE(int state, int action, float reward){
 
     QTABLE[state][action] = (1 - learning_rate) * QTABLE[state][action] + learning_rate * reward;
 }
@@ -66,7 +79,7 @@ void write_outputs_to_file(int action){
     for(int channel=0; channel < NUM_CHANNELS; channel++){
             fprintf(file_outputs,"%f, ", temp_metric_values[channel]);
     }
-    fprintf(file_outputs,"chosen action: %d\n",action);
+    fprintf(file_outputs,"\nchosen action: %d\n",action);
     fprintf(file_outputs,"----------------------------------------------\n");
 }
 
@@ -93,7 +106,7 @@ void init_metric_values(){
 int chooseAction(int state){
 
     // Epsilon-Greedy Policy
-    double epsilon = 0.1;
+    float epsilon = 0.1;
     if ((double)rand() / RAND_MAX < epsilon){
         printf("EXPLORATION CASE\n");
         // Exploration
@@ -114,7 +127,7 @@ int chooseAction(int state){
 void process(){
 
     int action;
-    double reward, metric;
+    float reward, metric;
 
     // repeat the slotframe #LIMIT times
     for(int slotframe = 0; slotframe < LIMIT; slotframe++){
@@ -143,15 +156,13 @@ void process(){
 
             copy_metric_values_to_temp();
         }
-
-
     }
 }
 
 int main(){
 
     file_actions = fopen("../outputs/q-learning-test-actions.txt","w");
-    file_outputs = fopen("../outputs/greedy-test-outputs.txt","w");
+    file_outputs = fopen("../outputs/q-learning-test-outputs.txt","w");
     file_metrics = fopen("../outputs/greedy-test-metrics.txt","r");
     file_channels_availability = fopen("../outputs/greedy-available-channels.txt","r");
 
@@ -161,9 +172,12 @@ int main(){
     init_metric_values;
     process();
     printf("dropped: %d\n",dropped);
+    print_QTABLE_to_file();
 
     fclose(file_actions);
     fclose(file_outputs);
+    fclose(file_metrics);
+    fclose(file_channels_availability);
 
 
     return 0;
