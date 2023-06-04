@@ -9,11 +9,11 @@
 FILE *file_outputs;
 FILE *file_actions;
 FILE *file_metrics;
-FILE *file_available_channels;
+FILE *file_channels_availability;
 
 double metric_values[NUM_CHANNELS];
 double metric_average[NUM_CHANNELS];
-int available_channels[SLOTFRAME_SIZE][NUM_CHANNELS];
+int channels_availability[SLOTFRAME_SIZE][NUM_CHANNELS];
 int temp_metric_values[NUM_CHANNELS];
 
 int iteration = 0;
@@ -21,8 +21,8 @@ int dropped;
 
 int chooseAction();
 void process();
-void init_available_channels();
-void write_available_channels_to_file();
+void init_channels_availability();
+void write_channels_availability_to_file();
 void init_metric_average();
 void init_metric_values();
 void random_metric_values(int timeslot);
@@ -65,7 +65,7 @@ void random_metric_values(int timeslot){
         metric_values[channel]= ((double)rand() / RAND_MAX)*30 -90;
 
         metric_average[channel] = (metric_average[channel] * iteration +
-                    metric_values[channel]*available_channels[timeslot][channel])/
+                    metric_values[channel]*channels_availability[timeslot][channel])/
                     (iteration + 1);
                         
         fprintf(file_outputs,"metric value: %f, metric average: %f\n",
@@ -87,22 +87,22 @@ void init_metric_values(){
     }
 }
 
-void write_available_channels_to_file(){
+void write_channels_availability_to_file(){
     for(int timeslot=0; timeslot<SLOTFRAME_SIZE; timeslot++){
         for(int channel=0; channel<NUM_CHANNELS; channel++){
-            fprintf(file_available_channels,"%d\n",available_channels[timeslot][channel]);
+            fprintf(file_channels_availability,"%d\n",channels_availability[timeslot][channel]);
         }
     }
 }
 
-void init_available_channels(){
+void init_channels_availability(){
     for(int timeslot=0; timeslot<SLOTFRAME_SIZE; timeslot++){
         for(int channel=0; channel<NUM_CHANNELS; channel++){
             if((double)rand()/RAND_MAX < 0.5){
-                available_channels[timeslot][channel] = 1; //available
+                channels_availability[timeslot][channel] = 1; //available
             }
             else{
-                available_channels[timeslot][channel] =2; //unavailable
+                channels_availability[timeslot][channel] =2; //unavailable
             }
         }
     }
@@ -132,7 +132,7 @@ void process(){
             
             action = chooseAction();
 
-            if(available_channels[timeslot][action] == 2){
+            if(channels_availability[timeslot][action] == 2){
                 dropped++;
             }
 
@@ -152,14 +152,14 @@ int main(){
     file_actions = fopen("../outputs/greedy-test-actions.txt","w");
     file_outputs = fopen("../outputs/greedy-test-outputs.txt","w");
     file_metrics = fopen("../outputs/greedy-test-metrics.txt","w");
-    file_available_channels = fopen("../outputs/greedy-available-channels.txt","w");
+    file_channels_availability = fopen("../outputs/greedy-available-channels.txt","w");
 
     srand(time(0));
 
     init_metric_average();
     init_metric_values;
-    init_available_channels();
-    write_available_channels_to_file();
+    init_channels_availability();
+    write_channels_availability_to_file();
     process();
 
     print_metric_average();
