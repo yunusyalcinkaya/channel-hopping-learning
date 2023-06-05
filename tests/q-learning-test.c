@@ -65,7 +65,7 @@ void write_mix_output(int action, int timeslot){
         }
         fprintf(file_mix_output,"\n");
     }
-    fprintf(file_mix_output,"chosen action: %d\n",action);
+    fprintf(file_mix_output,"chosen action: %d, timeslot: %d\n \n",action, timeslot);
 }
 
 
@@ -123,7 +123,7 @@ void read_channels_availability_from_file(){
 }
 
 float get_reward(float rssi_metric, float lqi_metric, int state, int action){
-    if(channels_availability[state][action] == 2 || action == previous_action){
+    if(channels_availability[state][action] == 2 ||  action == previous_action){
         return -50;
     }
     previous_action = action;
@@ -176,11 +176,13 @@ void read_metric_values_from_file(){
 void init_rssi_metric_values(){
     for(int channel=0; channel<NUM_CHANNELS; channel++){
         rssi_metric_values[channel] = -90;
+        temp_rssi_metric_values[channel] = -90;
     }
 }
 void init_lqi_metric_values(){
     for(int channel=0; channel<NUM_CHANNELS; channel++){
         lqi_metric_values[channel] = 100;
+        temp_lqi_metric_values[channel] =100;
     }
 }
 
