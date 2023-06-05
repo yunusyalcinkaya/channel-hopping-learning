@@ -7,7 +7,7 @@ public class CountAction{
 
     public static void main(String[] args) throws FileNotFoundException {
 
-        int[] channels = new int[16]; 
+        int[] channels = new int[80]; 
         File file = new File("learning/outputs/q-learning-test-actions.txt");
         Scanner scanner = new Scanner(file);
 

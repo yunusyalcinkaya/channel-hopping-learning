@@ -8,7 +8,7 @@
 
 FILE *file_outputs;
 FILE *file_actions;
-FILE *file_metrics;
+FILE *file_rssi_metrics;
 double metric_values[NUM_CHANNEL];
 
 double metric_average[NUM_CHANNEL];
@@ -35,7 +35,7 @@ void process(){
         for(int i=0; i<NUM_CHANNEL; i++){
             metric_values[i]= ((double)rand() / RAND_MAX)*30 -90;
 
-            fprintf(file_metrics,"%f\n",metric_values[i]);
+            fprintf(file_rssi_metrics,"%f\n",metric_values[i]);
             metric_average[i] = (metric_average[i] * iteration + metric_values[i]) / (iteration + 1);
             fprintf(file_outputs,"metric value: %f, metric average: %f\n",metric_values[i],metric_average[i]);
         }
@@ -56,7 +56,7 @@ int main(){
 
     file_actions = fopen("../outputs/greedy-actions.txt","w");
     file_outputs = fopen("../outputs/greedy-outputs.txt","w");
-    file_metrics = fopen("../outputs/greedy-metrics.txt","w");
+    file_rssi_metrics = fopen("../outputs/greedy-metrics.txt","w");
 
     srand(time(0));
     process();

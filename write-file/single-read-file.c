@@ -7,7 +7,7 @@
 #define MAX_STEPS 10000
 
 FILE *file_actions;
-FILE *file_metrics;
+FILE *file_rssi_metrics;
 
 
 void update_Q_TABLE(int action, double reward, double alpha);
@@ -57,7 +57,7 @@ void train_algorithm(){
     for (int step = 0; step < MAX_STEPS; step++){
 
         for(int i=0; i<NUM_ACTIONS;i++){
-            fscanf(file_metrics,"%f",&metric_values[i]);
+            fscanf(file_rssi_metrics,"%f",&metric_values[i]);
         }
 
 
@@ -102,7 +102,7 @@ void print_Q_TABLE(){
 int main(){
 
     file_actions = fopen("../outputs/single-read-file.txt","w");
-    file_metrics = fopen("../outputs/greedy-metrics.txt","r");
+    file_rssi_metrics = fopen("../outputs/greedy-metrics.txt","r");
 
     // Fill the Q-Table with initial values
     for (int j = 0; j < NUM_ACTIONS; j++)
@@ -116,6 +116,6 @@ int main(){
     print_Q_TABLE();
 
     fclose(file_actions);
-    fclose(file_metrics);
+    fclose(file_rssi_metrics);
     return 0;
 }
