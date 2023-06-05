@@ -20,6 +20,12 @@ int channels_availability[SLOTFRAME_SIZE][NUM_CHANNELS];
 float temp_rssi_metric_values[NUM_CHANNELS];
 float temp_lqi_metric_values[NUM_CHANNELS];
 float total_metric_average[NUM_CHANNELS];
+float metric_average_per_slot[SLOTFRAME_SIZE][NUM_CHANNELS];
+int numner_of_channel_usage[SLOTFRAME_SIZE][NUM_CHANNELS];
+float rssi_metric_average_per_slot[SLOTFRAME_SIZE][NUM_CHANNELS];
+float lqi_metric_average_per_slot[SLOTFRAME_SIZE][NUM_CHANNELS];
+int number_of_chosen_action[SLOTFRAME_SIZE][NUM_CHANNELS];
+
 
 int iteration = 0;
 int dropped;
@@ -38,6 +44,38 @@ void write_outputs_to_file(int action);
 void init_lqi_metric_values();
 void init_lqi_metric_average();
 void random_metric_values2(int timeslot);
+void print_metric_average_per_slot();
+void init_average_values();
+
+void init_average_values(){
+    for(int timeslot=0; timeslot < SLOTFRAME_SIZE; timeslot++){
+        for(int channel=0; channel < NUM_CHANNELS; channel++){
+            metric_average_per_slot[timeslot][channel] =0;
+            lqi_metric_average_per_slot[timeslot][channel] =100;
+            rssi_metric_average_per_slot[timeslot][channel] = -90;
+            number_of_chosen_action[timeslot][channel] =0;
+        }
+    }
+}
+
+void print_metric_average_per_slot(){
+    printf("\n average per slot\n");
+    for(int timeslot=0; timeslot < SLOTFRAME_SIZE; timeslot++){
+        for(int channel=0; channel < NUM_CHANNELS; channel++){
+            printf("%f, ", metric_average_per_slot[timeslot][channel]);
+        }
+        printf("\n \n");
+    }
+    printf("\n");
+    printf("\n number of chosen action per slot\n");
+    for(int timeslot=0; timeslot < SLOTFRAME_SIZE; timeslot++){
+        for(int channel=0; channel < NUM_CHANNELS; channel++){
+            printf("%d, ", number_of_chosen_action[timeslot][channel]);
+        }
+        printf("\n \n");
+    }
+
+}
 
 void init_lqi_metric_average(){
     for(int channel=0; channel<NUM_CHANNELS; channel++){
@@ -126,21 +164,23 @@ void random_metric_values2(int timeslot){
         rssi_metric_values[channel]= ((float)rand() / RAND_MAX)*20 -90;
         lqi_metric_values[channel] = ((float)rand() / RAND_MAX)*100;
 
-        rssi_metric_average[channel] = (rssi_metric_average[channel] * iteration +
+        rssi_metric_average_per_slot[timeslot][channel] = 
+                (rssi_metric_average_per_slot[timeslot][channel] * 
+                numner_of_channel_usage[timeslot][channel] +
                     rssi_metric_values[channel])/
-                    (iteration + 1);
-        lqi_metric_average[channel] = (lqi_metric_average[channel] * iteration +
+                    (numner_of_channel_usage[timeslot][channel] + 1);
+
+        lqi_metric_average_per_slot[timeslot][channel] = 
+                (lqi_metric_average_per_slot[timeslot][channel] * 
+                numner_of_channel_usage[timeslot][channel] +
                     lqi_metric_values[channel])/
-                    (iteration + 1);
-        total_metric_average[channel] = (lqi_metric_average[channel] +
-                                            rssi_metric_average[channel]) /2;
-                        
-        fprintf(file_outputs,"rssi metric value: %f, rssi metric average: %f\n",
-                                rssi_metric_values[channel],rssi_metric_average[channel]);
-        fprintf(file_outputs,"lqi metric value: %f, lqi metric average: %f\n",
-                                lqi_metric_values[channel],lqi_metric_average[channel]);
+                    (numner_of_channel_usage[timeslot][channel] + 1);
+
+        metric_average_per_slot[timeslot][channel] = (lqi_metric_average_per_slot[timeslot][channel] +
+                 rssi_metric_average_per_slot[timeslot][channel]) /2;
+
+        numner_of_channel_usage[timeslot][channel]++;
     }
-    iteration++;
     write_metric_values_to_file();
 }
 
@@ -201,6 +241,7 @@ void process(){
             random_metric_values2(timeslot);
             
             action = chooseAction();
+            number_of_chosen_action[timeslot][action]++;
 
             if(channels_availability[timeslot][action] == 2){
                 dropped++;
@@ -227,6 +268,7 @@ int main(){
 
     srand(time(0));
 
+    init_average_values();
     init_lqi_metric_average();
     init_lqi_metric_values();
     init_rssi_metric_average();
@@ -235,8 +277,10 @@ int main(){
     write_channels_availability_to_file();
     process();
 
-    print_metric_average();
+    //print_metric_average();
     printf("dropped: %d\n",dropped);
+    print_metric_average_per_slot();
+    
 
     fclose(file_actions);
     fclose(file_outputs);

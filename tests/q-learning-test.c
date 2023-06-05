@@ -13,7 +13,6 @@ FILE *file_channels_availability;
 FILE *file_lqi_metrics;
 
 float QTABLE[SLOTFRAME_SIZE][NUM_CHANNELS];
-
 float rssi_metric_values[NUM_CHANNELS];
 int channels_availability[SLOTFRAME_SIZE][NUM_CHANNELS];
 float temp_rssi_metric_values[NUM_CHANNELS];
@@ -70,7 +69,7 @@ void read_channels_availability_from_file(){
 
 float get_reward(float rssi_metric, float lqi_metric, int state, int action){
     if(channels_availability[state][action] == 2 || action == previous_action){
-        return -20;
+        return -10;
     }
     previous_action = action;
     return -(10/rssi_metric)*lqi_metric;
