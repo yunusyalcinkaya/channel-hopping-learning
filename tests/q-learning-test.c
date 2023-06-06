@@ -23,6 +23,7 @@ float temp_rssi_metric_values[NUM_CHANNELS];
 float lqi_metric_values[NUM_CHANNELS];
 float temp_lqi_metric_values[NUM_CHANNELS];
 int number_of_chosen_action_per_slot[SLOTFRAME_SIZE][NUM_CHANNELS];
+int previous_choise[SLOTFRAME_SIZE];
 
 int iteration = 0;
 int dropped;
@@ -123,10 +124,10 @@ void read_channels_availability_from_file(){
 }
 
 float get_reward(float rssi_metric, float lqi_metric, int state, int action){
-    if(channels_availability[state][action] == 2 ||  action == previous_action){
+    if(channels_availability[state][action] == 2){// || previous_choise[state] == action
         return -50;
     }
-    previous_action = action;
+    //previous_action = action;
     return -(10/rssi_metric)*lqi_metric;
     //return metric +91;
 }
@@ -189,7 +190,7 @@ void init_lqi_metric_values(){
 int chooseAction(int state){
 
     // Epsilon-Greedy Policy
-    float epsilon = 0.1;
+    float epsilon = 0.2;
     if ((double)rand() / RAND_MAX < epsilon){// Exploration
         return rand() % NUM_CHANNELS;
     }
@@ -229,6 +230,7 @@ void process(){
             lqi_metric = temp_lqi_metric_values[action];
 
             reward = get_reward(rssi_metric, lqi_metric,timeslot,action);
+            previous_choise[timeslot] = action;
 
             copy_metric_values_to_temp();
 
