@@ -3,8 +3,8 @@
 #include <time.h>
 
 #define NUM_CHANNELS 10 // actions (channels)
-#define SLOTFRAME_SIZE 17 // states (timeslots)
-#define LIMIT 500
+#define SLOTFRAME_SIZE 5 // states (timeslots)
+#define LIMIT 10
 
 FILE *file_outputs;
 FILE *file_actions;
@@ -123,7 +123,7 @@ void read_channels_availability_from_file(){
 }
 
 float get_reward(float rssi_metric, float lqi_metric, int state, int action){
-    if(channels_availability[state][action] == 2){
+    if(channels_availability[state][action] == 2){// || previous_choise[state] == action
         return -50;
     }
     //previous_action = action;
@@ -190,7 +190,7 @@ void init_lqi_metric_values(){
 int chooseAction(int state){
 
     // Epsilon-Greedy Policy
-    float epsilon = 0.2;
+    float epsilon = 0.0;
     if ((double)rand() / RAND_MAX < epsilon){// Exploration
         return rand() % NUM_CHANNELS;
     }
@@ -230,13 +230,18 @@ void process(){
             lqi_metric = temp_lqi_metric_values[action];
 
             reward = get_reward(rssi_metric, lqi_metric,timeslot,action);
+            update_QTABLE(timeslot,action,reward);
+
+            for(int channel=0;channel<NUM_CHANNELS;channel++){
+                reward = get_reward(temp_rssi_metric_values[channel],
+                            temp_lqi_metric_values[channel],timeslot,channel);
+                update_QTABLE(timeslot,channel,reward);
+            }
 
             copy_metric_values_to_temp();
 
-            write_outputs_to_file(action);
-            
-            update_QTABLE(timeslot,action,reward);
 
+            write_outputs_to_file(action);
             fprintf(file_actions,"%d\n",action);
 
             
@@ -246,12 +251,12 @@ void process(){
 
 int main(){
 
-    file_actions = fopen("../learning-outputs/actions.txt","w");
-    file_outputs = fopen("../learning-outputs/metric-outputs.txt","w");
-    file_formatted_channels_availability = fopen("../learning-outputs/formatted-channels-availability.txt","w");
-    file_number_of_chosen_action_per_slot = fopen("../learning-outputs/number-of-chosen-action-per-slot.txt","w");
-    file_QTABLE = fopen("../learning-outputs/q-table.txt","w");
-    file_mix_output = fopen("../learning-outputs/mix-output.txt","w");
+    file_actions = fopen("../learning-demo-outputs/actions.txt","w");
+    file_outputs = fopen("../learning-demo-outputs/metric-outputs.txt","w");
+    file_formatted_channels_availability = fopen("../learning-demo-outputs/formatted-channels-availability.txt","w");
+    file_number_of_chosen_action_per_slot = fopen("../learning-demo-outputs/number-of-chosen-action-per-slot.txt","w");
+    file_QTABLE = fopen("../learning-demo-outputs/q-table.txt","w");
+    file_mix_output = fopen("../learning-demo-outputs/mix-output.txt","w");
 
     // read
     file_rssi_metrics = fopen("../inputs/greedy-test-rssi-metrics.txt","r");

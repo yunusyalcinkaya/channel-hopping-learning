@@ -3,8 +3,8 @@
 #include <time.h>
 
 #define NUM_CHANNELS 10
-#define SLOTFRAME_SIZE 17
-#define LIMIT 500
+#define SLOTFRAME_SIZE 5
+#define LIMIT 10
 
 FILE *file_outputs;
 //FILE *file_actions;
