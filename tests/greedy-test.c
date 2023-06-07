@@ -2,9 +2,9 @@
 #include <stdlib.h>
 #include <time.h>
 
-#define NUM_CHANNELS 10
+#define NUM_CHANNELS 16
 #define SLOTFRAME_SIZE 5
-#define LIMIT 10
+#define LIMIT 1000
 
 FILE *file_outputs;
 //FILE *file_actions;
@@ -28,6 +28,7 @@ int numner_of_channel_usage[SLOTFRAME_SIZE][NUM_CHANNELS];
 float rssi_metric_average_per_slot[SLOTFRAME_SIZE][NUM_CHANNELS];
 float lqi_metric_average_per_slot[SLOTFRAME_SIZE][NUM_CHANNELS];
 int number_of_chosen_action[SLOTFRAME_SIZE][NUM_CHANNELS];
+float extra[] = {0.0,0.0,10.0,0.0,0.0,10.0,10.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,};
 
 
 int iteration = 0;
@@ -167,7 +168,7 @@ void write_metric_values_to_file(){
 
 void random_metric_values2(int timeslot){
     for(int channel=0; channel<NUM_CHANNELS; channel++){
-        rssi_metric_values[channel]= ((float)rand() / RAND_MAX)*20 -90;
+        rssi_metric_values[channel]= ((float)rand() / RAND_MAX)*20 -90 + extra[channel];
         lqi_metric_values[channel] = ((float)rand() / RAND_MAX)*100;
 
         rssi_metric_average_per_slot[timeslot][channel] = 

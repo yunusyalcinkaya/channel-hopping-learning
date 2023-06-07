@@ -2,9 +2,9 @@
 #include <stdlib.h>
 #include <time.h>
 
-#define NUM_CHANNELS 10 // actions (channels)
+#define NUM_CHANNELS 16 // actions (channels)
 #define SLOTFRAME_SIZE 5 // states (timeslots)
-#define LIMIT 10
+#define LIMIT 1000
 
 FILE *file_outputs;
 FILE *file_actions;
