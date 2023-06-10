@@ -127,8 +127,9 @@ float get_reward(float rssi_metric, float lqi_metric, int state, int action){
         return -50;
     }
     //previous_action = action;
-    return -(10/rssi_metric)*lqi_metric;
+    //return -(10/rssi_metric)*lqi_metric;
     //return metric +91;
+    return rssi_metric + lqi_metric;
 }
 
 
