@@ -227,11 +227,11 @@ void process(){
                 dropped++;
             }
 
-            rssi_metric = temp_rssi_metric_values[action];
-            lqi_metric = temp_lqi_metric_values[action];
+            // rssi_metric = temp_rssi_metric_values[action];
+            // lqi_metric = temp_lqi_metric_values[action];
 
-            reward = get_reward(rssi_metric, lqi_metric,timeslot,action);
-            update_QTABLE(timeslot,action,reward);
+            // reward = get_reward(rssi_metric, lqi_metric,timeslot,action);
+            // update_QTABLE(timeslot,action,reward);
 
             for(int channel=0;channel<NUM_CHANNELS;channel++){
                 reward = get_reward(temp_rssi_metric_values[channel],
