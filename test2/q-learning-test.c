@@ -4,7 +4,7 @@
 
 #define NUM_CHANNELS 16 // actions (channels)
 #define SLOTFRAME_SIZE 5 // states (timeslots)
-#define LIMIT 1000
+#define LIMIT 10000
 
 FILE *file_outputs;
 FILE *file_actions;
@@ -23,7 +23,7 @@ int number_of_chosen_action_per_slot[SLOTFRAME_SIZE][NUM_CHANNELS];
 
 int iteration = 0;
 int dropped;
-float learning_rate = 0.1;
+float learning_rate = 0.2;
 int previous_action =0;
 
 int chooseAction(int state);
@@ -127,7 +127,8 @@ float get_reward(float rssi_metric, int state, int action){
 
 void update_QTABLE(int state, int action, float reward){
 
-    QTABLE[state][action] = (1 - learning_rate) * QTABLE[state][action] + learning_rate * reward;
+    QTABLE[state][action] = (1 - learning_rate) * QTABLE[state][action] +
+             learning_rate * reward;
 }
 
 void init_QTABLE(){

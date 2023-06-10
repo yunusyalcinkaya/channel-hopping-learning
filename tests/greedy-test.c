@@ -4,7 +4,7 @@
 
 #define NUM_CHANNELS 16
 #define SLOTFRAME_SIZE 5
-#define LIMIT 1000
+#define LIMIT 10000
 
 FILE *file_outputs;
 //FILE *file_actions;
