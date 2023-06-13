@@ -1,3 +1,6 @@
+// sadece rssi'a göre hesaplama yapıyor
+// her slotta sadece 1 kanalı güncelliyor
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
@@ -60,8 +63,6 @@ void write_mix_output(int action, int timeslot){
     fprintf(file_mix_output,"chosen action: %d, timeslot: %d\n \n",action, timeslot);
 }
 
-
-
 void init_number_of_chosen_action_per_slot(){
     for(int timeslot=0; timeslot<SLOTFRAME_SIZE; timeslot++){
         for(int channel=0; channel<NUM_CHANNELS;channel++){
@@ -83,7 +84,6 @@ void write_number_of_chosen_action_per_slot(){
     }
     fprintf(file_number_of_chosen_action_per_slot,"\n");
 }
-
 
 void write_channels_availability_to_file(){
     fprintf(file_formatted_channels_availability,"----------- channels availability-----------\n");
@@ -124,7 +124,6 @@ float get_reward(float rssi_metric, int state, int action){
     return rssi_metric/100.0;
 }
 
-
 void update_QTABLE(int state, int action, float reward){
 
     QTABLE[state][action] = (1 - learning_rate) * QTABLE[state][action] +
@@ -150,7 +149,6 @@ void write_outputs_to_file(int action){
     fprintf(file_outputs,"----------------------------------------------\n");
 }
 
-
 void copy_metric_values_to_temp(){
     for(int channel=0; channel <NUM_CHANNELS; channel++){
         temp_rssi_metric_values[channel] = rssi_metric_values[channel];
@@ -169,7 +167,6 @@ void init_rssi_metric_values(){
         temp_rssi_metric_values[channel] = -90;
     }
 }
-
 
 int chooseAction(int state){
 

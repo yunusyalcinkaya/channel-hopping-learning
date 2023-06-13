@@ -1,3 +1,6 @@
+// rssi ve lqi metriklerinin toplamına göre hesaplama yapıyor
+// bir slotta bütün kanalları güncelliyor
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
