@@ -7,7 +7,7 @@
 #define NUM_STATES 16
 #define MAX_STEPS 10000
 
-FILE *file;
+FILE *file_input;
 
 void update_Q_TABLE(int state,int action, double reward, double alpha);
 int chooseAction(int state);
@@ -55,7 +55,7 @@ void train_algorithm(){
         int action = chooseAction(current_state);// best action index
         double reward;
        
-        fprintf(file,"%d\n", action);
+        fprintf(file_input,"%d\n", action);
 
         print_Q_TABLE();
         printf("state: %d, choosen action: %d\n",current_state, action);
@@ -92,7 +92,7 @@ void print_Q_TABLE(){
 
 int main(){
 
-    file = fopen("../outputs/multi-write-action.txt","w");
+    file_input = fopen("../outputs/multi-write-action.txt","w");
 
     for(int i = 0; i < NUM_STATES;i++){
         for(int j = 0; j < NUM_ACTIONS;j++){
@@ -104,6 +104,6 @@ int main(){
 
     print_Q_TABLE();
 
-    fclose(file);
+    fclose(file_input);
     return 0;
 }

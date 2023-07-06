@@ -6,7 +6,7 @@
 #define NUM_ACTIONS 16
 #define MAX_STEPS 10000
 
-FILE *file;
+FILE *file_input;
 
 void update_Q_TABLE(int action, double reward, double alpha);
 int chooseAction();
@@ -57,7 +57,7 @@ void train_algorithm(){
         int action = chooseAction();// best action index
         double reward;
        
-        fprintf(file,"%d\n", action);
+        fprintf(file_input,"%d\n", action);
         
         print_Q_TABLE();
         printf("choosen action: %d\n", action);
@@ -94,7 +94,7 @@ void print_Q_TABLE(){
 
 int main(){
 
-    file = fopen("../outputs/single-write-action.txt","w");
+    file_input = fopen("../outputs/single-write-action.txt","w");
 
     // Fill the Q-Table with initial values
     for (int j = 0; j < NUM_ACTIONS; j++)
@@ -107,6 +107,6 @@ int main(){
 
     print_Q_TABLE();
 
-    fclose(file);
+    fclose(file_input);
     return 0;
 }

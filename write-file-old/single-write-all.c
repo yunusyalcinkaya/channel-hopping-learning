@@ -12,7 +12,7 @@ void train_algorithm(FILE* file);
 void print_Q_TABLE(FILE* file);
 int prev_action = 0;
 
-FILE *file;
+FILE *file_input;
 
 double Q_TABLE[NUM_ACTIONS];
 double rewards[NUM_ACTIONS];
@@ -22,7 +22,7 @@ int chooseAction(){
     // Epsilon-Greedy Policy
     double epsilon = 0.1;
     if ((double)rand() / RAND_MAX < 0){
-        fprintf(file,"UNDESIRED CASE\n");
+        fprintf(file_input,"UNDESIRED CASE\n");
         // Exploration
         return rand() % NUM_ACTIONS;
     }
@@ -90,7 +90,7 @@ void print_Q_TABLE(FILE* file){
 }
 
 int main(){
-    file = fopen("../outputs/single-write-all.txt","w");
+    file_input = fopen("../outputs/single-write-all.txt","w");
 
     // Fill the Q-Table with initial values
     for (int j = 0; j < NUM_ACTIONS; j++){
@@ -98,9 +98,9 @@ int main(){
     }
         Q_TABLE[0] = 25.0;
 
-    train_algorithm(file);
+    train_algorithm(file_input);
 
-    print_Q_TABLE(file);
-    fclose(file);
+    print_Q_TABLE(file_input);
+    fclose(file_input);
     return 0;
 }

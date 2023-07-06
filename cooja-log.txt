@@ -1,0 +1,13 @@
+ID:2	neigbour list: 3, 5, 7, 9
+ID:2	init phase: 3, channel_11:-45, channel_12:-44, channel_13:-66, .............. channel_26:-55
+ID:2	init phase: 5, channel_11:-45, channel_12:-44, channel_13:-66, .............. channel_26:-55
+ID:2	init phase: 7, channel_11:-45, channel_12:-44, channel_13:-66, .............. channel_26:-55
+ID:2	init phase: 9, channel_11:-45, channel_12:-44, channel_13:-66, .............. channel_26:-55
+ID:3	neigbour list: 1, 7, 9
+ID:3	init phase: 1, channel_11:-45, channel_12:-44, channel_13:-66, .............. channel_26:-55
+ID:3	init phase: 7, channel_11:-45, channel_12:-44, channel_13:-66, .............. channel_26:-55
+ID:3	init phase: 9, channel_11:-45, channel_12:-44, channel_13:-66, .............. channel_26:-55
+ID:44	neigbour list: 66, 65, 67
+ID:44	init phase: 66, channel_11:-45, channel_12:-44, channel_13:-66, .............. channel_26:-55
+ID:44	init phase: 65, channel_11:-45, channel_12:-44, channel_13:-66, .............. channel_26:-55
+ID:44	init phase: 67, channel_11:-45, channel_12:-44, channel_13:-66, .............. channel_26:-55
